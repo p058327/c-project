@@ -5,63 +5,77 @@ int bf_signs(char* software)
 
 {
     int array_size = 30000;
-    // int i = 0;
+    int counter = 0;
 
     brain* brainf = malloc(sizeof(brain));
     brainf->code = software;
     brainf->memory = malloc(array_size * sizeof(char));
-    // brainf->code_ptr = 0;
-    // brainf->memory_ptr = 0;
 
-    // for (i = 0; i < 30000; ++i)
-    // {
-    //     brainf->memory[i] = 0;
-    // }
-    // printf("%c\n", brainf->memory[0]);
+    char *pointer = brainf->code;
+    char *memory = brainf->memory;
+    
+    while(*pointer != '\0'){
 
-    while(*brainf->code != '\0'){
-
-    switch (*brainf->code)
+    switch (*pointer)
     {
     case '>':
-        ++(brainf->memory);
+        ++(memory);
         break;
     case '<':
-        --(brainf->memory);
-        break;
-    case '+':
-        ++(*brainf->memory);
+        --(memory);
         // printf("%s\n", "AAAAAA");
         break;
+    case '+':
+        ++(*memory);
+        break;
     case '-':
-        --(*brainf->memory);
+        --(*memory);
         break;
     case '.':
-        printf("%c", *brainf->memory);
+        printf("%c", *memory);
         break;
     case '[':
-        if (!*brainf->memory)
+        if (!*memory)
         {
-            while (*brainf->code !=']')
+            ++counter;
+            while (*pointer !=']' || counter > 0)
                 {
-                    ++brainf->code;
+                    if (*pointer ==']')
+                    {
+                        --counter;
+                    }
+                    if (*pointer =='[')
+                    {
+                        ++counter;
+                    }
+                    ++pointer;
                 };
-                --brainf->code;
+            --pointer;
         };       
         break;
     case ']':
-        if (*brainf->memory)
+        if (*memory)
+
         {
-            while (*brainf->code !='[')
+            --counter;
+            while (*pointer != '[' || counter > 0)
             {
-                --brainf->code;
+                if (*pointer =='[')
+                    {
+                        --counter;
+                    }
+                if (*pointer ==']')
+                {
+                    ++counter;
+                }
+                --pointer;
             }            
         };
         break;
     default:
         break;
     }
-    ++brainf->code;
+    ++pointer;
     }
     free(brainf->memory);
     free(brainf);
